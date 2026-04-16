@@ -1,15 +1,10 @@
 const express = require('express')
 const axios = require('axios')
-const https = require('https')
+const qs = require('querystring')
 
 const app = express()
 
 app.use(express.json())
-
-// SSL workaround (samo za test)
-const agent = new https.Agent({
-  rejectUnauthorized: false
-})
 
 // test ruta
 app.get('/', (req, res) => {
@@ -45,13 +40,12 @@ app.post('/shopify/order', async (req, res) => {
 
   try {
     const response = await axios.post(
-      "http://app.ntclogistics.me/api",
-      new URLSearchParams({
+      "http://app.ntclogistics.me/api/index.php",
+      qs.stringify({
         act: "new_shipment",
-        data: JSON.stringify(shipment).replace(/"/g, '\\"')
+        data: JSON.stringify(shipment)
       }),
       {
-        httpsAgent: agent,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         }
