@@ -45,7 +45,7 @@ app.post('/shopify/order', async (req, res) => {
 
   try {
     const response = await axios.post(
-      "https://app.ntclogistics.me/api",
+      "http://app.ntclogistics.me/api",
       new URLSearchParams({
         act: "new_shipment",
         data: JSON.stringify(shipment)
