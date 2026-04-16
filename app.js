@@ -1,9 +1,15 @@
 const express = require('express')
 const axios = require('axios')
+const https = require('https')
 
 const app = express()
 
 app.use(express.json())
+
+// SSL workaround (samo za test)
+const agent = new https.Agent({
+  rejectUnauthorized: false
+})
 
 // test ruta
 app.get('/', (req, res) => {
@@ -45,6 +51,7 @@ app.post('/shopify/order', async (req, res) => {
         data: JSON.stringify(shipment)
       }),
       {
+        httpsAgent: agent,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         }
