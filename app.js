@@ -16,8 +16,8 @@ app.post('/shopify/order', async (req, res) => {
   const o = req.body
 
   const shipment = {
-    username: "goran",
-    password: "goran123",
+    username: "gaia",
+    password: "gaia24862",
 
     receiver_name: o.shipping_address?.name,
     receiver_phone: o.phone || o.shipping_address?.phone,
