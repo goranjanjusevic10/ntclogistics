@@ -1,18 +1,67 @@
 const express = require('express')
+const axios = require('axios')
+
 const app = express()
 
 app.use(express.json())
 
+// test ruta
 app.get('/', (req, res) => {
   res.send('Middleware radi')
 })
 
-app.post('/shopify/order', (req, res) => {
-  console.log('ORDER RECEIVED:', req.body)
+// SHOPIFY WEBHOOK
+app.post('/shopify/order', async (req, res) => {
+  const o = req.body
+
+  const shipment = {
+    username: "goran",
+    password: "goran123",
+
+    receiver_name: o.shipping_address?.name,
+    receiver_phone: o.phone || o.shipping_address?.phone,
+    receiver_city: o.shipping_address?.city,
+    receiver_address: o.shipping_address?.address1,
+
+    ext_code: String(o.id),
+
+    payer: "sender",
+    payment_type: "cash",
+
+    content: o.line_items.map(i => ({
+      pack_type: "collete",
+      weight: 1,
+      volume: 0
+    }))
+  }
+
+  console.log("SENDING:", shipment)
+
+  try {
+    const response = await axios.post(
+      "https://app.ntclogistics.me/api",
+      new URLSearchParams({
+        act: "new_shipment",
+        data: JSON.stringify(shipment)
+      }),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }
+    )
+
+    console.log("DELIVERY RESPONSE:", response.data)
+
+  } catch (e) {
+    console.error("DELIVERY ERROR:", e.message)
+  }
+
   res.sendStatus(200)
 })
 
 const PORT = process.env.PORT || 3000
+
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`)
 })
