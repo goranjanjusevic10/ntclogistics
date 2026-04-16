@@ -48,7 +48,7 @@ app.post('/shopify/order', async (req, res) => {
       "http://app.ntclogistics.me/api",
       new URLSearchParams({
         act: "new_shipment",
-        data: JSON.stringify(shipment)
+        data: JSON.stringify(shipment).replace(/"/g, '\\"')
       }),
       {
         httpsAgent: agent,
