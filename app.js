@@ -67,11 +67,13 @@ app.post('/shopify/order', async (req, res) => {
     payer: "sender",
     payment_type: isCOD(o) ? "cash" : "account",
 
-    content: o.line_items.map(i => ({
-      pack_type: "collete",
-      weight: i.grams ? i.grams / 1000 : 1,
-      volume: 0
-    }))
+  content: [
+    {
+    pack_type: "collete",
+    weight: 0,
+    volume: 0
+  }
+]
   }
 
   console.log("SENDING:", shipment)
