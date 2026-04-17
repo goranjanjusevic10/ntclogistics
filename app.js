@@ -27,8 +27,8 @@ app.post('/shopify/order', async (req, res) => {
   processedOrders.add(extCode)
 
   const shipment = {
-    username: "goran",
-    password: "goran123",
+    username: "gaia",
+    password: "gaia24862",
 
     variant: "sending",
     direct_delivery: "0",
