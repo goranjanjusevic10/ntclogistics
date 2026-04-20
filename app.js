@@ -5,20 +5,16 @@ const qs = require('querystring')
 const app = express()
 app.use(express.json())
 
-// DEDUPLIKACIJA
 const processedOrders = new Set()
 
-// test ruta
 app.get('/', (req, res) => {
   res.send('Middleware radi')
 })
 
-// SHOPIFY WEBHOOK
 app.post('/shopify/order', async (req, res) => {
   const o = req.body
   const extCode = `NTC-${o.id}`
 
-  // spriječi duplikate
   if (processedOrders.has(extCode)) {
     console.log("DUPLICATE ORDER SKIPPED:", extCode)
     return res.sendStatus(200)
@@ -42,13 +38,12 @@ app.post('/shopify/order', async (req, res) => {
 
     ext_code: extCode,
 
+    // FIKSNO
     shipment_value: 0,
     money_return: "0",
-
     payer: "sender",
-    payment_type: "cash",
+    payment_type: "account",
 
-    // UVIJEK 1 KOLET, 0 KG
     content: [
       {
         pack_type: "collete",
